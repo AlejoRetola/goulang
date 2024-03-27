@@ -42,3 +42,22 @@ func main() {
     }
     fmt.Println(strings.Join(res, " "))
 }
+var2 := 0
+loop
+
+str1 = 
+losmiercolesmiercolesautomovil
+var := str1.index
+
+ str2 = str1[var2:var]
+ str2 *= procesar(var: var+9)
+var + 9
+var2 := var + 9
+condicion si -1
+ break
+end;
+
+
+str2 += lo que queda 
+
+str2 = "losMIERCOLESMIERCOLES"
