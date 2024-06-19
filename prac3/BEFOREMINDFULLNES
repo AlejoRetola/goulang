@@ -1,0 +1,60 @@
+package main
+
+import (
+	"fmt"
+	"sync"
+)
+
+var done = make(chan bool)
+
+func atenderCola(cola chan string, i int) {
+	for range cola {
+		cliente := <-cola // ok
+		fmt.Println("Atendiendo al cliente ", cliente, " en cola ", i)
+		done <- true
+	}
+
+}
+
+func main() {
+	var wg sync.WaitGroup
+	cajas := make([]chan string, 5)
+	nombres := []string{
+		"Ana", "Carlos", "María", "José", "Luis",
+		"Sofía", "Miguel", "Lucía", "Juan", "Laura",
+		"Andrés", "Elena", "Javier", "Isabel", "David",
+		"Paula", "Sergio", "Marta", "Pedro",
+	}
+
+	for i := range cajas { // ESTE RANGE FUNCA, RANGE SI PONGO _ , CAJA := RANGE CAJAS NO
+		cajas[i] = make(chan string, 100)
+		go atenderCola(cajas[i], i)
+	}
+	wg.Add(1)
+	go func() {
+		for _, persona := range nombres {
+			colaCorta := 9999
+			enviar := 0
+			for i := range cajas {
+				if len(cajas[i]) < colaCorta {
+					colaCorta = len(cajas[i])
+					enviar = i
+				}
+			}
+			fmt.Println("Envie a ", persona, " a la cola ", enviar, " de len ", len(cajas[enviar]))
+			cajas[enviar] <- persona
+		}
+	}()
+
+	go func() {
+		defer wg.Done()
+		for range nombres {
+			<-done
+		}
+		for i := range cajas {
+			close(cajas[i])
+		}
+	}()
+
+	wg.Wait()
+}
