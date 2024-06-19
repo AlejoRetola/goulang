@@ -84,6 +84,7 @@ func main() {
 		for i := range nombres {
 			filaGlobal <- nombres[i]
 		}
+  		//ACAA FALTA UN WAIT PORQUE NO CHECKEAS SI TODOS FUERON ATENDIDOS
 		close(filaGlobal)
 		} ()
 	*/
